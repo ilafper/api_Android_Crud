@@ -10,5 +10,15 @@
   "license": "ISC",
   "dependencies": {
     "mongodb": "^6.20.0"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ilafper/api_Android_Crud.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/ilafper/api_Android_Crud/issues"
+  },
+  "homepage": "https://github.com/ilafper/api_Android_Crud#readme"
 }
