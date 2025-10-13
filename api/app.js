@@ -41,14 +41,14 @@ app.get('/api/usuarios', async (req, res) => {
   try {
     const { usuarios } = await connectToMongoDB();
     const lista = await usuarios.find().toArray();
+    console.log(lista);
+    
     res.json(lista);
   } catch (error) {
     res.status(500).json({ error: 'Error al obtener los especialistas' });
+    console.log("nonononon");
+    
   }
 });
-
-
-
-
 
 module.exports = app;
