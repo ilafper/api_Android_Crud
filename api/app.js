@@ -37,6 +37,7 @@ app.use((req, res, next) => {
   next();
 });
 
+//endpoint para obtener todos los usuarios
 app.get('/api/usuarios', async (req, res) => {
   try {
     const { usuarios } = await connectToMongoDB();
@@ -47,7 +48,6 @@ app.get('/api/usuarios', async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: 'Error al obtener los especialistas' });
     console.log("nonononon");
-    
   }
 });
 
