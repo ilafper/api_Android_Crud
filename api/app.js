@@ -1,36 +1,23 @@
 const express = require('express');
-const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+const { MongoClient, ServerApiVersion } = require('mongodb');
 const app = express();
 app.use(express.json());
 
-// Configura la conexión a MongoDB
 const uri = "mongodb+srv://ialfper:ialfper21@alumnos.zoinj.mongodb.net/alumnos?retryWrites=true&w=majority";
 const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  }
+  serverApi: { version: ServerApiVersion.v1, strict: true, deprecationErrors: true }
 });
 
-// Función para conectar a la base de datos y obtener las colecciones
-function connectToMongoDB() {
+async function connectToMongoDB() {
   try {
-    client.connect();
-    console.log("Conectado a MongoDB Atlas");
+    if (!client.isConnected()) await client.connect();
     const db = client.db('UsuariosAndroid');
-    return {
-
-      usuarios: db.collection('usuarios'),
-
-    };
+    return { usuarios: db.collection('usuarios') };
   } catch (error) {
     console.error("Error al conectar a MongoDB:", error);
-    throw new Error('Error al conectar a la base de datos');
+    throw error;
   }
 }
-
-
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -39,43 +26,35 @@ app.use((req, res, next) => {
   next();
 });
 
-//endpoint para obtener todos los usuarios
-app.get('/api/usuarios', (req, res) => {
+app.get('/api/usuarios', async (req, res) => {
   try {
-    const { usuarios } = connectToMongoDB();
-    const lista = usuarios.find().toArray();
-    console.log(lista);
-
+    const { usuarios } = await connectToMongoDB();
+    const lista = await usuarios.find().toArray();
     res.json(lista);
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: 'Error al obtener los especialistas' });
-    console.log("nonononon");
   }
 });
 
-
-
-app.post('/api/crear', (req, res) => {
-
-  const { nombre, rango, region, via } = req.body;
-
-  if (!nombre || !rango || !region || !via_principal) {
-    return res.status(400).json({ error: 'Faltan campos obligatorios...' });
-  }
-
-  const nuevaTarjeta = {
-    nombre: nombre,
-    rango: rango,
-    region: region,
-    via_principal: via
-  };
-
+app.post('/api/crear', async (req, res) => {
   try {
-    const { usuarios } = connectToMongoDB();
+    const { nombre, rango, region, via } = req.body;
 
-    // 1. Insertar el documento
-    const resultado = usuarios.insertOne(nuevaTarjeta);
+    if (!nombre || !rango || !region || !via) {
+      return res.status(400).json({ error: 'Faltan campos obligatorios...' });
+    }
 
+    const { usuarios } = await connectToMongoDB();
+
+    const nuevaTarjeta = {
+      nombre,
+      rango,
+      region,
+      via_principal: via
+    };
+
+    const resultado = await usuarios.insertOne(nuevaTarjeta);
 
     console.log(`Tarjeta creada con ID: ${resultado.insertedId}`);
 
@@ -86,13 +65,9 @@ app.post('/api/crear', (req, res) => {
     });
 
   } catch (error) {
-    // Manejo de errores 
     console.error("Error al guardar la tarjeta en MongoDB:", error);
-    res.status(500).json({ error: 'Error interno del servidor al crear la tarjeta' });
+    res.status(500).json({ error: 'Error interno del servidor al crear la tarjeta', detalle: error.message });
   }
-
 });
-
-
 
 module.exports = app;
