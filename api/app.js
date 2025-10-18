@@ -98,24 +98,24 @@ app.post('/api/crear', async (req, res) => {
 // endpoint borrar targeta
 
 app.delete('/api/usuarios/:id', async (req, res) => {
-    const { id } = req.params;
+  const id = req.params.id;
+  if (!id) return res.status(400).json({ error: 'Falta el ID' });
 
-    if (!id) return res.status(400).json({ error: "Falta el ID" });
+  try {
+    const { usuarios } = connectToMongoDB();
+    const resultado = await usuarios.deleteOne({ _id: new ObjectId(id) });
 
-    try {
-        const { usuarios } = connectToMongoDB();
-        const resultado = await usuarios.deleteOne({ _id: new ObjectId(id) });
-
-        if (resultado.deletedCount === 0) {
-            return res.status(404).json({ error: "No se encontró la tarjeta" });
-        }
-
-        res.json({ mensaje: "Tarjeta eliminada correctamente", id });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: "Error al eliminar la tarjeta" });
+    if (resultado.deletedCount === 0) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
     }
+
+    res.json({ mensaje: 'Usuario borrado correctamente' });
+  } catch (error) {
+    console.error("Error al borrar usuario:", error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
 });
+
 
 
 
