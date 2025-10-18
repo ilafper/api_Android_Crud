@@ -102,7 +102,7 @@ app.delete('/api/usuarios/:id', async (req, res) => {
   if (!id) return res.status(400).json({ error: 'Falta el ID' });
 
   try {
-    const { usuarios } = connectToMongoDB();
+    const { usuarios } = await connectToMongoDB();
     const resultado = await usuarios.deleteOne({ _id: new ObjectId(id) });
 
     if (resultado.deletedCount === 0) {
