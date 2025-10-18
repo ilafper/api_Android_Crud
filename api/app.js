@@ -55,9 +55,9 @@ app.get('/api/usuarios', async (req, res) => {
 
 
 
-app.post('/api/creartargeta', async (req, res) => {
+app.post('/api/crear', async (req, res) => {
 // ... (Destructuring y validación de req.body) ...
-    const { nombre, rango, region, via_principal } = req.body; // Asegúrate de usar via_principal
+    const { nombre, rango, region, via_principal } = req.body; 
 
     if (!nombre || !rango || !region || !via_principal) {
         return res.status(400).json({ error: 'Faltan campos obligatorios...' });
