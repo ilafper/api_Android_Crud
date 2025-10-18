@@ -40,7 +40,7 @@ app.use((req, res, next) => {
 });
 
 //endpoint para obtener todos los usuarios
-app.get('/api/usuarios', async (req, res) => {
+app.get('/api/usuarios', (req, res) => {
   try {
     const { usuarios } = connectToMongoDB();
     const lista = usuarios.find().toArray();
@@ -55,7 +55,7 @@ app.get('/api/usuarios', async (req, res) => {
 
 
 
-app.post('/api/crear', async (req, res) => {
+app.post('/api/crear', (req, res) => {
 
   const { nombre, rango, region, via } = req.body;
 
