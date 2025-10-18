@@ -95,4 +95,28 @@ app.post('/api/crear', async (req, res) => {
 
 
 
+// endpoint borrar targeta
+
+app.delete('/api/usuarios/:id', async (req, res) => {
+    const { id } = req.params;
+
+    if (!id) return res.status(400).json({ error: "Falta el ID" });
+
+    try {
+        const { usuarios } = connectToMongoDB();
+        const resultado = await usuarios.deleteOne({ _id: new ObjectId(id) });
+
+        if (resultado.deletedCount === 0) {
+            return res.status(404).json({ error: "No se encontró la tarjeta" });
+        }
+
+        res.json({ mensaje: "Tarjeta eliminada correctamente", id });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Error al eliminar la tarjeta" });
+    }
+});
+
+
+
 module.exports = app;
