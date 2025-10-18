@@ -51,9 +51,9 @@ app.get('/api/usuarios', async (req, res) => {
   }
 });
 
-// ... código anterior (configuración, connectToMongoDB, endpoint GET)
 
-// Nuevo endpoint POST para crear una nueva tarjeta/usuario
+
+//endpoint para crear personaje
 app.post('/api/creartargeta', async (req, res) => {
     // Los datos de la tarjeta vienen en el cuerpo de la petición (req.body)
     const { nombre, rango, region, via } = req.body; 
