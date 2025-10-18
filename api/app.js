@@ -51,4 +51,44 @@ app.get('/api/usuarios', async (req, res) => {
   }
 });
 
+// ... código anterior (configuración, connectToMongoDB, endpoint GET)
+
+// Nuevo endpoint POST para crear una nueva tarjeta/usuario
+app.post('/api/creartargeta', async (req, res) => {
+    // Los datos de la tarjeta vienen en el cuerpo de la petición (req.body)
+    const { nombre, rango, region, via } = req.body; 
+
+    // Opcional: Validación básica de los datos
+    if (!nombre || !rango || !region || !via) {
+        return res.status(400).json({ error: 'Faltan campos obligatorios: nombre, rango, region, o via.' });
+    }
+
+    // Objeto que se insertará en MongoDB
+    const nuevaTarjeta = {
+        nombre: nombre,
+        rango: rango,
+        region: region,
+        via: via,
+        fechaCreacion: new Date() // Opcional: Añadir una marca de tiempo
+    };
+
+    try {
+        const { usuarios } = await connectToMongoDB();
+        
+        
+        const resultado = await usuarios.insertOne(nuevaTarjeta);
+
+        
+        console.log(`Tarjeta creada con ID: ${resultado.insertedId}`);
+        
+        
+
+    } catch (error) {
+       
+        console.error("Error al guardar la tarjeta en MongoDB:", error);
+        res.status(500).json({ error: 'Error interno del servidor al crear la tarjeta' });
+    }
+});
+
+
 module.exports = app;
