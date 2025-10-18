@@ -68,8 +68,7 @@ app.post('/api/creartargeta', async (req, res) => {
         nombre: nombre,
         rango: rango,
         region: region,
-        via: via,
-        fechaCreacion: new Date() // Opcional: Añadir una marca de tiempo
+        via_principal: via,
     };
 
     try {
