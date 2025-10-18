@@ -30,6 +30,8 @@ async function connectToMongoDB() {
   }
 }
 
+
+
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
@@ -53,41 +55,44 @@ app.get('/api/usuarios', async (req, res) => {
 
 
 
-//endpoint para crear personaje
 app.post('/api/creartargeta', async (req, res) => {
-    // Los datos de la tarjeta vienen en el cuerpo de la petición (req.body)
-    const { nombre, rango, region, via } = req.body; 
+// ... (Destructuring y validación de req.body) ...
+    const { nombre, rango, region, via_principal } = req.body; // Asegúrate de usar via_principal
 
-    // Opcional: Validación básica de los datos
-    if (!nombre || !rango || !region || !via) {
-        return res.status(400).json({ error: 'Faltan campos obligatorios: nombre, rango, region, o via.' });
+    if (!nombre || !rango || !region || !via_principal) {
+        return res.status(400).json({ error: 'Faltan campos obligatorios...' });
     }
 
-    // Objeto que se insertará en MongoDB
     const nuevaTarjeta = {
         nombre: nombre,
         rango: rango,
         region: region,
-        via_principal: via,
+        via_principal: via_principal,
     };
 
     try {
         const { usuarios } = await connectToMongoDB();
         
-        
+        // 1. Insertar el documento
         const resultado = await usuarios.insertOne(nuevaTarjeta);
 
         
         console.log(`Tarjeta creada con ID: ${resultado.insertedId}`);
         
-        
+        res.status(201).json({ // <-- Esto finaliza la petición HTTP
+            mensaje: 'Tarjeta creada y guardada con éxito',
+            id: resultado.insertedId,
+            tarjeta: nuevaTarjeta 
+        });
 
     } catch (error) {
-       
+        // Manejo de errores 
         console.error("Error al guardar la tarjeta en MongoDB:", error);
         res.status(500).json({ error: 'Error interno del servidor al crear la tarjeta' });
     }
+
 });
+
 
 
 module.exports = app;
