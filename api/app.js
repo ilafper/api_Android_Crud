@@ -64,10 +64,10 @@ app.post('/api/crear', async (req, res) => {
     }
 
     const nuevaTarjeta = {
-        nombre: nombre,
-        rango: rango,
-        region: region,
-        via_principal: via_principal,
+      nombre: nombre,
+      rango: rango,
+      region: region,
+      via_principal: via_principal
     };
 
     try {
