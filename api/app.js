@@ -57,7 +57,7 @@ app.get('/api/usuarios', async (req, res) => {
 
 app.post('/api/crear', async (req, res) => {
 // ... (Destructuring y validación de req.body) ...
-    const { nombre, rango, region, via_principal } = req.body; 
+    const { nombre, rango, region, via } = req.body; 
 
     if (!nombre || !rango || !region || !via_principal) {
         return res.status(400).json({ error: 'Faltan campos obligatorios...' });
@@ -67,7 +67,7 @@ app.post('/api/crear', async (req, res) => {
       nombre: nombre,
       rango: rango,
       region: region,
-      via_principal: via_principal
+      via_principal: via
     };
 
     try {
@@ -79,7 +79,7 @@ app.post('/api/crear', async (req, res) => {
         
         console.log(`Tarjeta creada con ID: ${resultado.insertedId}`);
         
-        res.status(201).json({ // <-- Esto finaliza la petición HTTP
+        res.status(201).json({ 
             mensaje: 'Tarjeta creada y guardada con éxito',
             id: resultado.insertedId,
             tarjeta: nuevaTarjeta 
