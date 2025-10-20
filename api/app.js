@@ -119,9 +119,9 @@ app.delete('/api/usuarios/:id', async (req, res) => {
 //modificar
 
 // Endpoint para modificar un usuario
-app.put('/modificar/:id', async (req, res) => {
+app.put('/api/modificar/:id', async (req, res) => {
   const id = req.params.id;
-  const datosrecibidos = req.body; // Los campos que quieres actualizar
+  const datosrecibidos = req.body;
 
   if (!id) return res.status(400).json({ error: 'Falta el ID del usuario' });
 
@@ -131,7 +131,7 @@ app.put('/modificar/:id', async (req, res) => {
     
     const resultado = await usuarios.findOneAndUpdate(
       {  _id: new ObjectId(id) },       
-      { $set: datosrecibidos },     
+      { $set: datosrecibidos },
       { returnDocument: 'after' }      
     );
 
