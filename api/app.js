@@ -135,7 +135,7 @@ app.put('/api/modificar/:id', async (req, res) => {
       { returnDocument: 'after' }      
     );
 
-    if (!resultado.value) {
+    if (!resultado) {
       return res.status(404).json({ error: 'Usuario no encontrado' });
     }
 
