@@ -116,6 +116,35 @@ app.delete('/api/usuarios/:id', async (req, res) => {
   }
 });
 
+//modificar
+
+// Endpoint para modificar un usuario
+app.put('modificar/:id', async (req, res) => {
+  const id = req.params.id;
+  const datosrecibidos = req.body; // Los campos que quieres actualizar
+
+  if (!id) return res.status(400).json({ error: 'Falta el ID del usuario' });
+
+  try {
+    const { usuarios } = await connectToMongoDB();
+
+    
+    const resultado = await usuarios.findOneAndUpdate(
+      { _id: new ObjectId(id) },       
+      { $set: datosrecibidos },     
+      { returnDocument: 'after' }      
+    );
+
+    if (!resultado.value) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+
+    res.json({ mensaje: 'Usuario modificado correctamente', usuario: resultado.value });
+  } catch (error) {
+    console.error("Error al modificar usuario:", error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+});
 
 
 
