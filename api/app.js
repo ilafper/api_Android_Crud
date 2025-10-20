@@ -54,7 +54,6 @@ app.get('/api/usuarios', async (req, res) => {
 });
 
 
-
 app.post('/api/crear', async (req, res) => {
 // ... (Destructuring y validación de req.body) ...
     const { nombre, rango, region, via_principal } = req.body; 
