@@ -57,7 +57,7 @@ app.get('/api/usuarios', async (req, res) => {
 
 app.post('/api/crear', async (req, res) => {
 // ... (Destructuring y validación de req.body) ...
-    const { nombre, rango, region, via } = req.body; 
+    const { nombre, rango, region, via:via_principal } = req.body; 
 
     if (!nombre || !rango || !region || !via) {
         return res.status(400).json({ error: 'Faltan campos obligatorios...' });
@@ -67,7 +67,7 @@ app.post('/api/crear', async (req, res) => {
       nombre: nombre,
       rango: rango,
       region: region,
-      via_principal: via
+      via_principal: via_principal
     };
 
     try {
