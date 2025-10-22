@@ -31,7 +31,6 @@ async function connectToMongoDB() {
 }
 
 
-
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
@@ -45,13 +44,14 @@ app.get('/api/usuarios', async (req, res) => {
     const { usuarios } = await connectToMongoDB();
     const lista = await usuarios.find().toArray();
     console.log(lista);
-    
     res.json(lista);
   } catch (error) {
     res.status(500).json({ error: 'Error al obtener los especialistas' });
     console.log("nonononon");
   }
 });
+
+
 
 //endpoint s usuario
 app.post('/api/crear', async (req, res) => {
